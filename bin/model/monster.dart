@@ -1,19 +1,14 @@
 import 'dart:math';
+import 'unit.dart';
 
-import 'character.dart';
-
-class Monster {
-  String monsterName;
-  int monsterHp;
-  int attack;
-  int dependValue = 0;
-
-  Monster(this.monsterName, this.monsterHp, this.attack);
+class Monster extends Unit {
+  Monster(String name, int hp, int attack)
+    : super(name, hp, attack, 0); // 몬스터는 방어력 0으로 설정
 
   //리스트 -> 파일 문자열 전환(파일 저장용)
   @override
   String toString() {
-    return "$monsterName, $monsterHp, $attack";
+    return "$name, $hp, $attack";
   }
 
   //파일 -> 리스트화 작업 (파일 불러오기용)
@@ -27,20 +22,20 @@ class Monster {
     return Monster(parts[0], int.parse(parts[1]), int.parse(parts[2]));
   }
 
-  //
-  void attackCharacter(Character character) {
+  @override
+  void attackTarget(Unit target) {
     // 몬스터 -> 캐릭터 공격
     //  int damage = MonsterVaule -Charater defendValue
     int randomAttack = Random().nextInt(attack + 1);
-    int fixedAttack = max(randomAttack, character.defendValue); //더 큰 값 반환
-    int damage = fixedAttack - character.defendValue;
+    int fixedAttack = max(randomAttack, target.defend); //더 큰 값 반환
+    int damage = fixedAttack - target.defend;
     if (damage < 0) damage = 0; // min damage =>0
-    character.hp -= damage;
-    print('$monsterName이(가) ${character.name}에게 $damage 의 데미지를 입혔습니다.');
+    target.hp -= damage;
+    print('$name이(가) ${target.name}에게 $damage 의 데미지를 입혔습니다.');
   }
 
   showStatus() {
     //몬스터 현재 체력과 공격력을 매 턴 마다 출력
-    print('$monsterName - 체력: $monsterHp, 공격력: $attack');
+    print('$name - 체력: $hp, 공격력: $attack');
   }
 }

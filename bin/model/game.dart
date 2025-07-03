@@ -73,26 +73,26 @@ class Game {
       String? input = stdin.readLineSync();
       switch (input) {
         case '1':
-          character.attackMonster(monster);
+          character.attackTarget(monster);
           await Future.delayed(Duration(seconds: 2));
           break;
         case '2':
-          character.defend(monster);
+          character.characterDefend(monster);
           await Future.delayed(Duration(seconds: 1));
           break;
         default:
           print('다른 키를 입력하셨습니다.');
           continue; //다시 행동선택으로
       }
-      if (monster.monsterHp <= 0) {
+      if (monster.hp <= 0) {
         print('만세!! 위대한 용사 ${character.name}이(가) 몬스터를 물리쳤습니다♪');
         break;
       }
       print('=============================================');
-      print('${monster.monsterName} 의 턴'); //몬스터 턴
+      print('${monster.name} 의 턴'); //몬스터 턴
       print('=============================================');
       await Future.delayed(Duration(milliseconds: 1500));
-      monster.attackCharacter(character);
+      monster.attackTarget(character);
       await Future.delayed(Duration(seconds: 1));
       character.showStatus(); //캐릭터 상태 표시
       await Future.delayed(Duration(seconds: 1));
@@ -114,7 +114,7 @@ class Game {
     int index = Random().nextInt(monsters.length); //인덱스 번호 추출
     Monster selectedMonster = monsters.removeAt(index);
     print(
-      '\n★${selectedMonster.monsterName}-체력: ${selectedMonster.monsterHp}, 공격력: ${selectedMonster.attack}★',
+      '\n     ${selectedMonster.name}-체력: ${selectedMonster.hp}, 공격력: ${selectedMonster.attack}',
     );
     return selectedMonster;
   }
@@ -131,6 +131,7 @@ class Game {
 남은 체력: ${character.hp}
 결과: $result 
               ''';
+
       final file = File('result.txt');
       await file.writeAsString(content);
       print('결과가 result.txt파일에 저장되었습니다. \n 저장된 결과들을 확인하시겠습니까?(y/n)');
@@ -138,10 +139,14 @@ class Game {
       if (check == 'y') {
         String savedResult = await file.readAsString();
         print('\n저장된 결과\n$savedResult');
+        print('게임이 자동 종료됩니다.');
         return;
       } else {
+        print('게임이 자동 종료됩니다.');
         return;
       }
+    } else {
+      print('게임이 자동 종료됩니다.');
     }
   }
 }
