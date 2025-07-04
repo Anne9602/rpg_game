@@ -33,6 +33,7 @@ class Game {
     return lines.map((e) => Monster.fromString(e)).toList();
   }
 
+  //게임 전반적 운영 허브
   startGame() async {
     while (true) {
       //체력이 0이하면 게임 종료
@@ -63,6 +64,7 @@ class Game {
     }
   }
 
+  //전투모드
   Future<void> battle() async {
     //게임 중에 사용자는 매 턴마다 행동을 선택 할 수 있음
     Monster monster = await getRandomMonster();
@@ -106,6 +108,7 @@ class Game {
     }
   }
 
+  //몬스터 랜덤으로 가져오기
   Future<Monster> getRandomMonster() async {
     await Future.delayed(Duration(seconds: 2), () {
       print('\n !!!!!새로운 몬스터 출현!!!!!');
